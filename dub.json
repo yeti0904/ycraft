@@ -1,0 +1,15 @@
+{
+	"authors": [
+		"yeti0904"
+	],
+	"copyright": "Copyright © 2023, yeti0904",
+	"dependencies": {
+		"bindbc-sdl": "~>1.4.2"
+	},
+	"versions": [
+		"SDL_2022"
+	],
+	"description": "A minimal D application.",
+	"license": "MIT",
+	"name": "ycraft"
+}

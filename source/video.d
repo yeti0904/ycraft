@@ -89,4 +89,9 @@ class Video {
 		SDL_FreeSurface(surface);
 		return texture;
 	}
+
+	void Clear() {
+		auto rect = SDL_Rect(0, 0, size.x, size.y);
+		SDL_RenderFillRect(renderer, &rect);
+	}
 }

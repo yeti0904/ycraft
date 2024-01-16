@@ -6,7 +6,7 @@ import ycraft.types;
 import ycraft.video;
 import ycraft.blocks;
 import ycraft.exceptions;
-import ycraft.scenes.game;
+import ycraft.game;
 
 struct Block {
 	BlockID type = 0;
@@ -36,6 +36,10 @@ class World {
 		return &blocks[(y * size.x) + x];
 	}
 
+	Block* GetBlock(Vec2!int pos) {
+		return GetBlock(pos.x, pos.y);
+	}
+
 	void Generate() {
 		for (int x = 0; x < size.x; ++ x) {
 			int waterLevel = cast(int) (0.25 * (cast(float) size.y));
@@ -59,7 +63,7 @@ class World {
 		}
 	}
 
-	void Render(Vec2!double offset) {
+	void Render(Vec2!double offset, Vec2!int* selectedBlock) {
 		auto app      = App.Instance();
 		auto video    = app.video;
 		auto renderer = video.renderer;
@@ -85,19 +89,42 @@ class World {
 					GameScene.blockSize,
 					GameScene.blockSize
 				);
-				auto block = GetBlock(x, y);
+
+				if (
+					(app.cursor.x > blockRect.x) && (app.cursor.y > blockRect.y) &&
+					(app.cursor.x < blockRect.x + blockRect.w) &&
+					(app.cursor.y < blockRect.y + blockRect.h)
+				) {
+					*selectedBlock = Vec2!int(x, y);
+				}
+			}
+		}
+
+		for (int y = start.y; (y < end.y) && (y < size.y); ++ y) {
+			for (int x = start.x; (x < end.x) && (x < size.x); ++ x) {
+				auto blockRect = SDL_Rect(
+					(x * GameScene.blockSize) - cast(int) (offset.x * GameScene.blockSize),
+					(y * GameScene.blockSize) - cast(int) (offset.y * GameScene.blockSize),
+					GameScene.blockSize,
+					GameScene.blockSize
+				);
+				auto block    = GetBlock(x, y);
 				auto blockDef = blockDefs[block.type];
 
-				if (block.type == 0) continue;
+				if (block.type != 0) {
+					uint textureID = blockDef.textureID[0];
+					auto blockSrc = SDL_Rect(
+						(textureID % textureSize.x) * GameScene.blockSize,
+						(textureID / textureSize.y) * GameScene.blockSize,
+						GameScene.blockSize, GameScene.blockSize
+					);
+					SDL_RenderCopy(renderer, app.blockTextures, &blockSrc, &blockRect);
+				}
 
-				uint textureID = blockDef.textureID[0];
-
-				auto blockSrc = SDL_Rect(
-					(textureID % textureSize.x) * GameScene.blockSize,
-					(textureID / textureSize.y) * GameScene.blockSize,
-					GameScene.blockSize, GameScene.blockSize
-				);
-				SDL_RenderCopy(renderer, app.blockTextures, &blockSrc, &blockRect);
+				if (Vec2!int(x, y) == *selectedBlock) {
+					SDL_SetRenderDrawColor(renderer, 0xFF, 0x00, 0x00, 0xFF);
+					SDL_RenderDrawRect(renderer, &blockRect);
+				}
 			}
 		}
 	}

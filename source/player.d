@@ -23,6 +23,12 @@ class PlayerPhysicsController : PhysicsController {
 	private void Collision(Player player, World world, bool vertical) {
 		player.hitbox.x = max(0, player.hitbox.x);
 		player.hitbox.y = max(0, player.hitbox.y);
+		player.hitbox.x = min(
+			cast(double) world.size.x - player.hitbox.w, player.hitbox.x
+		);
+		player.hitbox.y = min(
+			cast(double) world.size.y - player.hitbox.h, player.hitbox.y
+		);
 
 		auto start = Vec2!int(
 			cast(int) floor(player.hitbox.x), cast(int) floor(player.hitbox.y)

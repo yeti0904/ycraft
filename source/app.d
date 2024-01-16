@@ -6,12 +6,12 @@ import std.stdio;
 import std.format;
 import std.string;
 import std.datetime.stopwatch;
+import ycraft.game;
 import ycraft.text;
 import ycraft.util;
 import ycraft.types;
 import ycraft.video;
 import ycraft.sceneManager;
-import ycraft.scenes.game;
 import ycraft.scenes.titleScreen;
 
 enum AppScene {

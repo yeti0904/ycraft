@@ -48,7 +48,9 @@ class TitleScreenScene : Scene {
 		auto video    = app.video;
 		auto renderer = video.renderer;
 
-		video.SetDrawColour(Video.HexToColour(0x249FDE));
+		video.SetDrawColour(Video.HexToColour(0x000000));
 		SDL_RenderClear(renderer);
+		video.SetDrawColour(Video.HexToColour(0x249FDE));
+		video.Clear();
 	}
 }

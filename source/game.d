@@ -1,18 +1,19 @@
-module ycraft.scenes.game;
+module ycraft.game;
 
 import std.stdio;
+import std.algorithm;
 import ycraft.app;
 import ycraft.util;
 import ycraft.video;
 import ycraft.types;
 import ycraft.world;
+import ycraft.blocks;
+import ycraft.player;
 import ycraft.uiManager;
 import ycraft.sceneManager;
-import ycraft.player;
 import ycraft.ui.table;
 import ycraft.ui.label;
 import ycraft.ui.button;
-import ycraft.scenes.game;
 
 class GameScene : Scene {
 	static const int blockSize = 16;
@@ -20,6 +21,7 @@ class GameScene : Scene {
 	Vec2!double camera;
 	World       world;
 	Player      player;
+	Vec2!int    selectedBlock;
 
 	static SDL_Rect FRectToRect(SDL_FRect rect) {
 		return SDL_Rect(
@@ -32,7 +34,7 @@ class GameScene : Scene {
 
 	override void Init() {
 		ui     = new UIManager();
-		world  = new World(Vec2!int(1000, 1000));
+		world  = new World(Vec2!int(45, 1000));
 		world.Generate();
 		
 		player          = new Player();
@@ -47,6 +49,20 @@ class GameScene : Scene {
 		
 		camera.x = player.hitbox.x - (video.size.x / 2 / blockSize);
 		camera.y = player.hitbox.y - (video.size.y / 2 / blockSize);
+		camera.x = max(0.0, camera.x);
+		camera.x = min(
+			cast(double) world.size.x - cast(double) (video.size.x / blockSize),
+			camera.x
+		);
+	}
+
+	Vec2!int GetSelectedBlock() {
+		auto app = App.Instance();
+
+		return Vec2!int(
+			(app.cursor.x / blockSize) + cast(int) camera.x,
+			(app.cursor.y / blockSize) + cast(int) camera.y
+		);
 	}
 
 	override void Update() {
@@ -71,15 +87,38 @@ class GameScene : Scene {
 		UpdateCamera();
 	}
 
+	override bool HandleEvent(SDL_Event* e) {
+		switch (e.type) {
+			case SDL_MOUSEBUTTONDOWN: {
+				switch (e.button.button) {
+					case SDL_BUTTON_LEFT:{
+						*world.GetBlock(selectedBlock) = Block(BlockType.None);
+						return true;
+					}
+					case SDL_BUTTON_RIGHT: {
+						*world.GetBlock(selectedBlock) = Block(BlockType.Dirt);
+						return true;
+					}
+					default: goto default;
+				}
+			}
+			default: {
+				return ui.HandleEvent(e);
+			}
+		}
+	}
+
 	override void Render() {
 		auto app      = App.Instance();
 		auto video    = app.video;
 		auto renderer = video.renderer;
 
-		video.SetDrawColour(Video.HexToColour(0x249FDE));
+		video.SetDrawColour(Video.HexToColour(0x000000));
 		SDL_RenderClear(renderer);
+		video.SetDrawColour(Video.HexToColour(0x249FDE));
+		video.Clear();
 
-		world.Render(camera);
+		world.Render(camera, &selectedBlock);
 
 		video.SetDrawColour(Video.HexToColour(0x00FF00));
 

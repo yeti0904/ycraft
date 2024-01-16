@@ -1,5 +1,6 @@
 module ycraft.world;
 
+import std.math;
 import ycraft.app;
 import ycraft.types;
 import ycraft.video;
@@ -28,10 +29,10 @@ class World {
 	}
 
 	Block* GetBlock(int x, int y) {
-		assert(x < size.x);
-		assert(y < size.y);
-		assert(x >= 0);
-		assert(y >= 0);
+		if (x >= size.x) ThrowFatal("X (%d) out of bounds (%d)", x, size.x);
+		if (y >= size.y) ThrowFatal("Y (%d) out of bounds (%d)", y, size.y);
+		if (x < 0)       ThrowFatal("X (%d) out of bounds (%d)", x, size.x);
+		if (y < 0)       ThrowFatal("Y (%d) out of bounds (%d)", y, size.y);
 		return &blocks[(y * size.x) + x];
 	}
 
@@ -39,6 +40,8 @@ class World {
 		for (int x = 0; x < size.x; ++ x) {
 			int waterLevel = cast(int) (0.25 * (cast(float) size.y));
 			int stoneLevel = waterLevel + 50;
+
+			waterLevel += cast(int) (sin(cast(float) x) * 3.0);
 
 			for (int y = 0; y < size.y; ++ y) {
 				if (y == waterLevel) {

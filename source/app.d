@@ -116,7 +116,7 @@ class App {
 		SDL_RenderPresent(video.renderer);
 
 		sw.stop();
-		deltaTime = sw.peek.total!("usecs") * 1000000.0;
+		deltaTime = sw.peek.total!("usecs") / 1000000.0;
 	}
 }
 

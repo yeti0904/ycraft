@@ -43,7 +43,6 @@ void ErrorMsg(Char, A...)(bool crash = false, in Char[] fmt, A args) {
 		stdout.flush();
 	}
 
-
 	SDL_ShowSimpleMessageBox(
 		SDL_MESSAGEBOX_ERROR, title.toStringz(), toStringz(str), null
 	);

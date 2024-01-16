@@ -132,6 +132,6 @@ void main() {
 	catch (Exception e) {
 		string crashMsg = format("%s", e);
 
-		ErrorMsg(true, "%s", e.msg);
+		ErrorMsg(true, "%s\n\n%s", e.msg, e.info);
 	}
 }

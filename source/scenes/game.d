@@ -54,17 +54,17 @@ class GameScene : Scene {
 		auto keys = SDL_GetKeyboardState(null);
 
 		if (keys[SDL_SCANCODE_A] && !keys[SDL_SCANCODE_D]) {
-			player.velocity.x = -10.0;
+			player.velocity.x = -7.0;
 		}
 		else if (!keys[SDL_SCANCODE_A] && keys[SDL_SCANCODE_D]) {
-			player.velocity.x = 10.0;
+			player.velocity.x = 7.0;
 		}
 		else {
 			player.velocity.x = 0.0;
 		}
 
 		if (keys[SDL_SCANCODE_SPACE] && player.touchingGround) {
-			player.velocity.y = -8.0;
+			player.velocity.y = -10.0;
 		}
 
 		player.physics.Update(player, world, app.deltaTime);

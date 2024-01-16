@@ -75,7 +75,7 @@ class PlayerPhysicsController : PhysicsController {
 	override void Update(Entity entity, World world, double deltaTime) {
 		auto player = cast(Player) entity;
 
-		player.velocity.y += 12.0 * deltaTime;
+		player.velocity.y += 18.0 * deltaTime;
 
 		player.hitbox.x += player.velocity.x * deltaTime;
 		Collision(player, world, false);

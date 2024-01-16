@@ -41,7 +41,7 @@ class World {
 			int waterLevel = cast(int) (0.25 * (cast(float) size.y));
 			int stoneLevel = waterLevel + 50;
 
-			waterLevel += cast(int) (sin(cast(float) x) * 3.0);
+			waterLevel += cast(int) (sin(cast(float) x / 5.0) * 3.0);
 
 			for (int y = 0; y < size.y; ++ y) {
 				if (y == waterLevel) {

@@ -15,7 +15,9 @@ class Video {
 	Vec2!int       size = Vec2!int(640, 360);
 
 	this() {
-		
+		version (Windows) {
+			sdlPath = "./SDL2.dll";
+		}
 	}
 
 	static string GetError() {

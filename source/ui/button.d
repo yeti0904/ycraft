@@ -11,6 +11,7 @@ static const segmentHeight = 8;
 
 class UIButton : UIElement {
 	string label;
+	void*  data;
 	
 	void function(UIButton) onClick;
 

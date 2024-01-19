@@ -77,7 +77,7 @@ class Video {
 		auto surface = SDL_LoadBMP(path.toStringz());
 
 		if (surface is null) {
-			ErrorMsg(false, "Failed to load texture: %s", Video.GetError());
+			ErrorMsg("Failed to load texture: %s", Video.GetError());
 		}
 
 		auto texture = SDL_CreateTextureFromSurface(
@@ -85,7 +85,7 @@ class Video {
 		);
 
 		if (texture is null) {
-			ErrorMsg(false, "Failed to create texture: %s", Video.GetError());
+			ErrorMsg("Failed to create texture: %s", Video.GetError());
 		}
 
 		SDL_FreeSurface(surface);

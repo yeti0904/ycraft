@@ -32,9 +32,9 @@ void Log(string str) {
 	}
 }
 
-void ErrorMsg(Char, A...)(bool crash = false, in Char[] fmt, A args) {
+void ErrorMsg(Char, A...)(in Char[] fmt, A args) {
 	auto str    = format(fmt, args);
-	auto title  = crash? format("%s has crashed", App.name) : "ERROR";
+	auto title  = "ERROR";
 	auto logStr = format("[%s] %s: %s", CurrentTimeString(), title, str);
 
 	stderr.writeln(logStr);
@@ -50,7 +50,7 @@ void ErrorMsg(Char, A...)(bool crash = false, in Char[] fmt, A args) {
 	exit(1);
 }
 
-void ErrorMsg(bool crash = false, string str) {
-	ErrorMsg(crash, "%s", str);
+void ErrorMsg(string str) {
+	ErrorMsg("%s", str);
 	exit(1);
 }

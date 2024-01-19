@@ -21,13 +21,15 @@ class UITable : UIElement {
 		uiHeight = puiHeight;
 	}
 
-	void AddElement(UIElement element) {
+	void AddElement(UIElement element, bool setSize = true) {
 		elements ~= element;
 
 		int heightSum = uiHeight + padding.y;
 
-		element.rect.w = rect.w / cols;
-		element.rect.h = uiHeight;
+		if (setSize) {
+			element.rect.w = rect.w / cols;
+			element.rect.h = uiHeight;
+		}
 		element.rect.x = ((cast(int) (elements.length - 1) % cols) * (rect.w / cols)) + rect.x;
 		element.rect.y = (((cast(int) elements.length - 1) / cols) * heightSum) + rect.y;
 
@@ -44,7 +46,7 @@ class UITable : UIElement {
 		elements       = [];
 
 		foreach (element ; elements2) {
-			AddElement(element);
+			AddElement(element, false);
 		}
 	}
 
